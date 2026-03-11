@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>รายละเอียดการจอง</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* bubbles */
+
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            animation: float 12s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-1000px);
+            }
+        }
+
+        /* navbar */
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 80px;
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .menu a:hover {
+            background: #007bff;
+        }
+
+        /* container */
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 40px;
+        }
+
+        /* header */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .booking-id {
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        /* card */
+
+        .card {
+
+            background: white;
+            color: black;
+
+            padding: 30px;
+            border-radius: 20px;
+
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+
+        }
+
+        /* top */
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* status */
+
+        .status {
+
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: white;
+
+        }
+
+        /* info */
+
+        .info {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* price */
+
+        .price-box {
+            margin-top: 25px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+
+        .total {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* buttons */
+
+        button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .back-btn {
+
+            background: #555;
+            color: white;
+
+        }
+
+        .cancel-btn {
+
+            margin-top: 20px;
+
+            background: linear-gradient(135deg, #ff4d4d, #cc0000);
+            color: white;
+
+            box-shadow: 0 5px 0 #8b0000;
+
+        }
+
+        .cancel-btn:active {
+
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #8b0000;
+
+        }
+
+        /* loader */
+
+        .loader {
+
+            display: none;
+
+            border: 5px solid #eee;
+            border-top: 5px solid #ff4d4d;
+            border-radius: 50%;
+
+            width: 30px;
+            height: 30px;
+
+            animation: spin 1s linear infinite;
+            margin: 15px auto;
+
+        }
+
+        @keyframes spin {
+
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+
+        }
+
+        /* note */
+
+        .note {
+            margin-top: 20px;
+            opacity: 0.8;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- bubbles -->
+
+    <div class="bubble" style="left:10%"></div>
+    <div class="bubble" style="left:30%;width:60px;height:60px"></div>
+    <div class="bubble" style="left:50%"></div>
+    <div class="bubble" style="left:70%"></div>
+    <div class="bubble" style="left:90%"></div>
+
+    <!-- navbar -->
+
+    <div class="navbar">
+
+        <div class="logo">แม่กา คาร์วอช</div>
+
+        <div class="menu">
+            <a href="home.html">หน้าแรก</a>
+            <a href="booking.html">จองบริการ</a>
+            <a href="history.html">ประวัติการจอง</a>
+            <a href="index.html">ออกจากระบบ</a>
+        </div>
+
+    </div>
+
+    <div class="container">
+
+        <div class="header">
+
+            <h1>รายละเอียดการจอง</h1>
+
+            <button class="back-btn" onclick="goBack()">
+                ← ย้อนกลับ
+            </button>
+
+        </div>
+
+        <p class="booking-id">
+            หมายเลขการจอง: #CAA-1234
+        </p>
+
+        <div class="card">
+
+            <div class="card-top">
+
+                <div>
+
+                    <h2 id="serviceName">บริการล้างรถ</h2>
+                    <p>ประเภทบริการมาตรฐาน</p>
+
+                </div>
+
+                <span id="status" class="status">
+                    รอดำเนินการ
+                </span>
+
+            </div>
+
+            <hr>
+
+            <div class="info">
+
+                <div class="item">
+
+                    <span>📅</span>
+
+                    <p id="dateTime">
+                        วันทำการจอง<br>
+                        -
+                    </p>
+
+                </div>
+
+                <div class="item">
+
+                    <span>📦</span>
+
+                    <p>
+                        สถานที่<br>
+                        แม่กา คาร์วอช
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="price-box">
+
+                <h3>รายละเอียดราคา</h3>
+
+                <div class="row">
+
+                    <span id="serviceText">ค่าบริการ</span>
+                    <span id="price">฿ 0</span>
+
+                </div>
+
+                <hr>
+
+                <div class="row total">
+
+                    <span>ราคาสุทธิ</span>
+                    <span id="totalPrice">฿ 0</span>
+
+                </div>
+
+            </div>
+
+            <button id="cancelBtn" class="cancel-btn">
+                ✖ ยกเลิกการจอง
+            </button>
+
+            <div class="loader" id="loader"></div>
+
+        </div>
+
+        <p class="note">
+            หากต้องการเลื่อนนัดหมาย กรุณาติดต่อก่อนล่วงหน้าอย่างน้อย 2 ชม.
+        </p>
+
+    </div>
+
+    <script>
+
+        /* ดึงข้อมูลแพ็คเกจ */
+
+        let serviceName = localStorage.getItem("serviceName");
+        let totalPrice = localStorage.getItem("totalPrice");
+
+        if (serviceName) {
+
+            document.getElementById("serviceName").innerText = serviceName;
+            document.getElementById("serviceText").innerText = serviceName;
+
+        }
+
+        if (totalPrice) {
+
+            document.getElementById("price").innerText = "฿ " + totalPrice;
+            document.getElementById("totalPrice").innerText = "฿ " + totalPrice;
+
+        }
+
+        /* วันเวลา */
+
+        let now = new Date();
+
+        let date = now.toLocaleDateString("th-TH");
+        let time = now.toLocaleTimeString("th-TH", { hour: '2-digit', minute: '2-digit' });
+
+        document.getElementById("dateTime").innerHTML =
+            "วันทำการจอง<br>" + date + " | " + time;
+
+        /* สถานะ */
+
+        let status = localStorage.getItem("bookingStatus");
+
+        let statusEl = document.getElementById("status");
+        let cancelBtn = document.getElementById("cancelBtn");
+
+        if (status === "cancel") {
+
+            statusEl.innerText = "ยกเลิกแล้ว";
+            statusEl.style.background = "#ff4d4d";
+
+            cancelBtn.style.display = "none";
+
+        }
+
+        else {
+
+            statusEl.innerText = "รอดำเนินการ";
+            statusEl.style.background = "#6c5ce7";
+
+        }
+
+        /* ย้อนกลับ */
+
+        function goBack() {
+
+            window.location.href = "history.html";
+
+        }
+
+        /* ยกเลิกการจอง */
+
+        cancelBtn.addEventListener("click", function () {
+
+            let confirmCancel = confirm("คุณจะยกเลิกการจองใช่มั้ย?");
+
+            if (confirmCancel) {
+
+                cancelBtn.style.display = "none";
+
+                document.getElementById("loader").style.display = "block";
+
+                /* delay */
+
+                setTimeout(function () {
+
+                    localStorage.setItem("bookingStatus", "cancel");
+
+                    alert("ยกเลิกการจองสำเร็จ");
+
+                    window.location.href = "history.html";
+
+                }, 2500);
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Login Carwash</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: white;
+        }
+
+        /* bubbles */
+
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            animation: float 12s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0)
+            }
+
+            100% {
+                transform: translateY(-1000px)
+            }
+        }
+
+        /* car animation */
+
+        .car {
+            position: absolute;
+            bottom: 30px;
+            font-size: 40px;
+            animation: drive 10s linear infinite;
+        }
+
+        @keyframes drive {
+
+            0% {
+                left: -100px
+            }
+
+            100% {
+                left: 110%
+            }
+
+        }
+
+        /* container */
+
+        .container {
+
+            width: 950px;
+            height: 520px;
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            border-radius: 20px;
+            overflow: hidden;
+
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+
+        }
+
+        /* left */
+
+        .left {
+
+            background: url("https://scontent.fbkk29-4.fna.fbcdn.net/v/t39.30808-6/481103654_122223288170067299_3933755871456130827_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeG265oIrP9Zd1fEdT7Y8-tRjBWJTPO4QTeMFYlM87hBNwHUrl_YLzyAM8RVzScuAxpmGYunNfQsIF_l9YYL2Etl&_nc_ohc=BYcFA6q9eeMQ7kNvwFPDfaW&_nc_oc=AdmbFyjPvy9AxqcpWg_b6mwHUiLLnlyiPFBPpY73h9JFqQi9QfeNqlM-TyWGhUQ3cGs&_nc_zt=23&_nc_ht=scontent.fbkk29-4.fna&_nc_gid=R8zHqZ11GtluXZtmwdLg6Q&_nc_ss=8&oh=00_AfxugR2G8u7ijVeqP9hgVzJkYkNXhsEYDemaq3t7FOLdow&oe=69B72262") center/cover;
+
+            position: relative;
+
+        }
+
+        .overlay {
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            background: rgba(0, 0, 0, 0.55);
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+            padding: 40px;
+
+        }
+
+        .overlay h2 {
+
+            font-weight: 500;
+            line-height: 1.5;
+
+        }
+
+        .stars {
+
+            margin-top: 10px;
+            font-size: 25px;
+            color: #ffd700;
+
+        }
+
+        /* right */
+
+        .right {
+
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(15px);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        .login-box {
+
+            width: 320px;
+
+        }
+
+        h1 {
+
+            margin-bottom: 5px;
+
+        }
+
+        .sub {
+
+            font-size: 18px;
+            opacity: 0.8;
+            margin-bottom: 20px;
+
+        }
+
+        /* role */
+
+        /* role */
+
+        .role-box {
+            margin-bottom: 25px;
+        }
+
+        .title {
+            font-size: 15px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .role-switch {
+            display: flex;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 50px;
+            overflow: hidden;
+            gap: 5px;
+            padding: 5px;
+        }
+
+        .role-switch label {
+
+            flex: 1;
+            text-align: center;
+
+            padding: 12px 0;
+
+            font-size: 15px;
+            font-weight: 500;
+
+            cursor: pointer;
+
+            border-radius: 50px;
+
+            transition: all 0.3s ease;
+
+        }
+
+        .role-switch input {
+            display: none;
+        }
+
+        .role-switch label:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .role-switch input:checked+label {
+
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+
+            color: white;
+
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+
+            transform: scale(1.05);
+
+        }
+
+        }
+
+        /* inputs */
+
+        label {
+
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+
+        }
+
+        input {
+
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+
+            border: none;
+            border-radius: 8px;
+
+            outline: none;
+
+        }
+
+        /* forgot */
+
+        .forgot {
+
+            text-align: right;
+            font-size: 13px;
+            margin-top: 5px;
+
+        }
+
+        .forgot a {
+
+            color: #00c6ff;
+            text-decoration: none;
+
+        }
+
+        /* login button */
+
+        .login-btn {
+
+            width: 100%;
+            margin-top: 15px;
+
+            padding: 12px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+
+            color: white;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+            box-shadow: 0 6px 0 #0047b3;
+
+            transition: 0.2s;
+
+        }
+
+        .login-btn:hover {
+
+            filter: brightness(1.1);
+
+        }
+
+        .login-btn:active {
+
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #0047b3;
+
+        }
+
+        /* loading */
+
+        .loader {
+
+            display: none;
+
+            border: 5px solid #eee;
+            border-top: 5px solid #00c6ff;
+
+            border-radius: 50%;
+
+            width: 30px;
+            height: 30px;
+
+            animation: spin 1s linear infinite;
+
+            margin: 15px auto;
+
+        }
+
+        @keyframes spin {
+
+            0% {
+                transform: rotate(0)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+
+        }
+
+        /* register */
+
+        .register {
+
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+
+        }
+
+        .register a {
+
+            color: #00c6ff;
+            text-decoration: none;
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- bubbles -->
+
+    <div class="bubble" style="left:10%"></div>
+    <div class="bubble" style="left:30%;width:60px;height:60px"></div>
+    <div class="bubble" style="left:50%"></div>
+    <div class="bubble" style="left:70%"></div>
+    <div class="bubble" style="left:90%"></div>
+
+    <!-- car animation -->
+
+    <div class="car">🚘</div>
+
+    <div class="container">
+
+        <div class="left">
+
+            <div class="overlay">
+
+                <h2>
+      
+                </h2>
+
+               
+
+            </div>
+
+        </div>
+
+        <div class="right">
+
+            <div class="login-box">
+
+                <h1>เข้าสู่ระบบ</h1>
+
+                <p class="sub">
+                    จัดการการจองล้างรถของคุณได้อย่างง่ายดาย
+                </p>
+
+                <div class="role-box">
+
+                    <p class="title">เลือกสถานะผู้ใช้งาน</p>
+
+                    <div class="role-switch">
+
+                        <input type="radio" id="customer" name="role" value="customer" checked>
+                        <label for="customer">ลูกค้า</label>
+
+                        <input type="radio" id="staff" name="role" value="staff">
+                        <label for="staff">พนักงาน</label>
+
+                        <input type="radio" id="owner" name="role" value="owner">
+                        <label for="owner">เจ้าของร้าน</label>
+
+                    </div>
+
+                </div>
+
+                <label>อีเมล หรือ เบอร์โทรศัพท์</label>
+                <input type="text" placeholder="กรอกอีเมล หรือ เบอร์โทรศัพท์">
+
+                <label>รหัสผ่าน</label>
+                <input type="password" placeholder="กรอกรหัสผ่าน">
+
+                <p class="forgot">
+                    <a href="password.html">ลืมรหัสผ่าน?</a>
+                </p>
+
+                <button class="login-btn" onclick="login()">
+                    เข้าสู่ระบบ ➜
+                </button>
+
+                <div class="loader" id="loader"></div>
+
+                <p class="register">
+                    ยังไม่มีบัญชี? <a href="register.html">สมัครสมาชิก</a>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        function login() {
+
+            const role = document.querySelector('input[name="role"]:checked').value;
+
+            document.querySelector(".login-btn").style.display = "none";
+            document.getElementById("loader").style.display = "block";
+
+            setTimeout(function () {
+
+                localStorage.setItem("isLogin", "true");
+                localStorage.setItem("userRole", role);
+
+                /* แยกหน้าตาม role */
+
+                if (role === "customer") {
+                    window.location.href = "home.html";
+                }
+
+                else if (role === "staff") {
+                    window.location.href = "staff.html";
+                }
+
+                else if (role === "owner") {
+                    window.location.href = "owner.html";
+                }
+
+            }, 2000);
+
+        }
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>สรุปรายละเอียดการจอง</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* bubbles */
+
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: float 10s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-1000px);
+            }
+        }
+
+        /* header */
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 80px;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        nav a:hover {
+            background: #007bff;
+        }
+
+        /* layout */
+
+        .container {
+            padding: 40px 80px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        /* card */
+
+        .card {
+            background: white;
+            color: black;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            margin-bottom: 20px;
+        }
+
+        /* service */
+
+        .service {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .service img {
+            width: 150px;
+            border-radius: 10px;
+        }
+
+        /* inputs */
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        /* buttons */
+
+        button {
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .back {
+            background: #555;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .pay {
+            width: 100%;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            margin-top: 20px;
+            box-shadow: 0 6px 0 #0047b3;
+        }
+
+        .pay:active {
+            transform: translateY(5px);
+            box-shadow: 0 2px 0 #0047b3;
+        }
+
+        /* summary */
+
+        .right {
+            background: white;
+            color: black;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            height: fit-content;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+
+        .total {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        select {
+            padding: 8px;
+            border-radius: 8px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- bubbles -->
+
+    <div class="bubble" style="left:10%"></div>
+    <div class="bubble" style="left:30%;width:60px;height:60px"></div>
+    <div class="bubble" style="left:50%"></div>
+    <div class="bubble" style="left:70%"></div>
+    <div class="bubble" style="left:90%"></div>
+
+
+    <header>
+
+        <div>
+            <h2>🚗 สรุปรายละเอียดการจอง</h2>
+            <p>โปรดตรวจสอบข้อมูลก่อนยืนยัน</p>
+        </div>
+
+        <nav>
+            <a href="home.html">หน้าหลัก</a>
+            <a href="booking.html">จองบริการ</a>
+            <a href="history.html">ประวัติ</a>
+            <a href="#" onclick="logout()">ออกจากระบบ</a>
+        </nav>
+
+    </header>
+
+
+    <div class="container">
+
+        <div class="layout">
+
+            <!-- LEFT -->
+
+            <div>
+
+                <div class="card">
+
+                    <h3>🚗 ข้อมูลบริการที่เลือก</h3>
+
+                    <div class="service">
+
+                        <img src="https://images.unsplash.com/photo-1607860108855-64acf2078ed9">
+
+                        <div>
+
+                            <h4 id="serviceName">-</h4>
+
+                            <p id="dateText">-</p>
+
+                            <p id="timeText">-</p>
+
+                            <a href="booking.html">แก้ไขบริการ</a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>👤 ข้อมูลลูกค้า</h3>
+
+                    <label>ชื่อ - นามสกุล</label>
+                    <input type="text" placeholder="เช่น สมชาย ใจดี">
+
+                    <label>เบอร์โทร</label>
+                    <input type="text" placeholder="012-456-7890">
+
+                    <label>ทะเบียนรถ</label>
+                    <input type="text" placeholder="กข 1234">
+
+                </div>
+
+                <button class="back" onclick="goBack()">← ย้อนกลับ</button>
+
+            </div>
+
+
+            <!-- RIGHT -->
+
+            <div class="right">
+
+                <h3>สรุปค่าบริการ</h3>
+
+                <div class="row">
+                    <span id="serviceText">บริการ</span>
+                    <span id="price">0</span>
+                </div>
+
+                <div class="row">
+                    <span>ส่วนลด</span>
+
+                    <select id="promo">
+                        <option value="0">ไม่มี</option>
+                        <option value="20">ลด 20</option>
+                        <option value="50">ลด 50</option>
+                    </select>
+
+                </div>
+
+                <div class="row">
+                    <span>ภาษี 7%</span>
+                    <span id="tax">0</span>
+                </div>
+
+                <hr>
+
+                <div class="row total">
+                    <span>ราคาสุทธิ</span>
+                    <span id="total">0</span>
+                </div>
+
+                <button class="pay" onclick="goQR()">ยืนยันและชำระเงิน →</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* รับข้อมูลจาก booking */
+
+        let serviceName = localStorage.getItem("serviceName");
+        let servicePrice = localStorage.getItem("totalPrice");
+        let date = localStorage.getItem("bookingDate");
+        let time = localStorage.getItem("bookingTime");
+
+        if (serviceName) {
+            document.getElementById("serviceName").innerText = serviceName;
+            document.getElementById("serviceText").innerText = serviceName;
+        }
+
+        if (date) {
+            document.getElementById("dateText").innerText = "วันที่ : " + date;
+        }
+
+        if (time) {
+            document.getElementById("timeText").innerText = "เวลา : " + time;
+        }
+
+        let basePrice = servicePrice ? parseFloat(servicePrice) : 0;
+
+        document.getElementById("price").innerText = basePrice;
+
+        /* promo */
+
+        let promoSelect = document.getElementById("promo");
+
+        promoSelect.addEventListener("change", updatePrice);
+
+        function updatePrice() {
+
+            let promo = parseFloat(promoSelect.value);
+
+            let afterPromo = basePrice - promo;
+
+            let tax = afterPromo * 0.07;
+
+            let total = afterPromo + tax;
+
+            document.getElementById("tax").innerText = tax.toFixed(2);
+
+            document.getElementById("total").innerText = total.toFixed(2);
+
+        }
+
+        updatePrice();
+
+        function goQR() {
+
+            let total = document.getElementById("total").innerText;
+
+            localStorage.setItem("totalPrice", total);
+
+            window.location.href = "payment.html";
+
+        }
+
+        function goBack() {
+
+            window.location.href = "booking.html";
+
+        }
+
+    </script>
+
+</body>
+
+</html>

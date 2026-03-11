@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <title>สมัครสมาชิก</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        body {
+
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+
+            height: 100vh;
+
+            color: white;
+
+            overflow: hidden;
+
+        }
+
+        /* bubbles */
+
+        .bubble {
+
+            position: absolute;
+
+            bottom: -100px;
+
+            width: 40px;
+
+            height: 40px;
+
+            background: rgba(255, 255, 255, 0.1);
+
+            border-radius: 50%;
+
+            animation: float 12s infinite;
+
+        }
+
+        @keyframes float {
+
+            0% {
+                transform: translateY(0)
+            }
+
+            100% {
+                transform: translateY(-1000px)
+            }
+
+        }
+
+        /* navbar */
+
+        .navbar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 20px 80px;
+
+            background: rgba(0, 0, 0, 0.35);
+
+            backdrop-filter: blur(10px);
+
+        }
+
+        .logo {
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+        .menu a {
+
+            color: white;
+
+            text-decoration: none;
+
+            margin-left: 20px;
+
+            padding: 8px 14px;
+
+            border-radius: 8px;
+
+            transition: 0.3s;
+
+        }
+
+        .menu a:hover {
+
+            background: #007bff;
+
+        }
+
+        .login {
+
+            background: #007bff;
+
+        }
+
+        /* center */
+
+        .center {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            height: 85vh;
+
+        }
+
+        /* register box */
+
+        .register-box {
+
+            width: 420px;
+
+            background: rgba(255, 255, 255, 0.08);
+
+            backdrop-filter: blur(12px);
+
+            padding: 40px;
+
+            border-radius: 20px;
+
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+
+            text-align: center;
+
+            animation: fade 0.7s;
+
+        }
+
+        @keyframes fade {
+
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+
+        }
+
+        /* icon */
+
+        .icon {
+
+            font-size: 45px;
+
+            margin-bottom: 10px;
+
+        }
+
+        .subtitle {
+
+            font-size: 14px;
+
+            opacity: 0.8;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* labels */
+
+        label {
+
+            display: block;
+
+            text-align: left;
+
+            margin-top: 10px;
+
+            font-size: 14px;
+
+        }
+
+        /* inputs */
+
+        input {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            margin-top: 5px;
+
+            margin-bottom: 10px;
+
+            outline: none;
+
+            background: rgba(255, 255, 255, 0.2);
+
+            color: white;
+
+        }
+
+        input::placeholder {
+
+            color: #ddd;
+
+        }
+
+        /* password group */
+
+        .password-group {
+
+            display: flex;
+
+            gap: 10px;
+
+        }
+
+        /* agreement */
+
+        .agree {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            font-size: 13px;
+
+            margin: 10px 0;
+
+        }
+
+        .agree a {
+
+            color: #00c6ff;
+
+            text-decoration: none;
+
+        }
+
+        /* button */
+
+        button {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+
+            color: white;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+        }
+
+        button:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+
+        }
+
+        /* success */
+
+        .success-msg {
+
+            margin-top: 15px;
+
+            background: #2ecc71;
+
+            padding: 10px;
+
+            border-radius: 10px;
+
+            display: none;
+
+        }
+
+        /* login link */
+
+        .login-link {
+
+            margin-top: 15px;
+
+            font-size: 14px;
+
+        }
+
+        .login-link a {
+
+            color: #00c6ff;
+
+            text-decoration: none;
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- bubbles -->
+
+    <div class="bubble" style="left:10%"></div>
+    <div class="bubble" style="left:30%;width:60px;height:60px"></div>
+    <div class="bubble" style="left:50%"></div>
+    <div class="bubble" style="left:70%"></div>
+    <div class="bubble" style="left:90%"></div>
+
+    <!-- NAVBAR -->
+
+    <div class="navbar">
+
+        <div class="logo">
+             แม่กา คาร์วอช
+        </div>
+
+        <div class="menu">
+            <a href="home.html">หน้าแรก</a>
+            <a href="booking.html">จองบริการ</a>
+            <a href="#">บริการของเรา</a>
+            <a class="login" href="index.html">เข้าสู่ระบบ</a>
+        </div>
+
+    </div>
+
+
+    <!-- REGISTER -->
+
+    <div class="center">
+
+        <div class="register-box">
+
+            <div class="icon">
+                👤
+            </div>
+
+            <h2>สมัครสมาชิก</h2>
+
+            <p class="subtitle">
+                เริ่มต้นการดูแลรถคุณแบบมืออาชีพ
+            </p>
+
+
+            <form>
+
+                <label>ชื่อ - นามสกุล</label>
+                <input type="text" id="name" placeholder="ระบุชื่อและนามสกุลของคุณ">
+
+                <label>เบอร์โทรศัพท์</label>
+                <input type="text" id="phone" placeholder="08X-XXXXXXX">
+
+                <label>อีเมล</label>
+                <input type="email" id="email" placeholder="carwash@mail.com">
+
+                <div class="password-group">
+
+                    <div>
+                        <label>รหัสผ่าน</label>
+                        <input type="password" id="pass1" placeholder="********">
+                    </div>
+
+                    <div>
+                        <label>ยืนยันรหัสผ่าน</label>
+                        <input type="password" id="pass2" placeholder="********">
+                    </div>
+
+                </div>
+
+                <div class="agree">
+
+                    <input type="checkbox" id="agree">
+
+                    <span>
+                        ยินยอมรับ
+                        <a href="#">เงื่อนไขการใช้บริการ</a>
+                        และ
+                        <a href="#">นโยบายความเป็นส่วนตัว</a>
+                    </span>
+
+                </div>
+
+                <button type="button" onclick="register()">
+                    สมัครสมาชิก
+                </button>
+
+                <p id="successMsg" class="success-msg">
+                    สมัครสมาชิกสำเร็จ ✔
+                </p>
+
+                <p class="login-link">
+
+                    มีบัญชีอยู่แล้ว?
+                    <a href="index.html">เข้าสู่ระบบ</a>
+
+                </p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        function register() {
+
+            let name = document.getElementById("name").value;
+            let phone = document.getElementById("phone").value;
+            let email = document.getElementById("email").value;
+            let pass1 = document.getElementById("pass1").value;
+            let pass2 = document.getElementById("pass2").value;
+            let agree = document.getElementById("agree");
+            let msg = document.getElementById("successMsg");
+
+            if (name == "" || phone == "" || email == "" || pass1 == "") {
+
+                alert("กรุณากรอกข้อมูลให้ครบ");
+
+                return;
+
+            }
+
+            if (pass1 !== pass2) {
+
+                alert("รหัสผ่านไม่ตรงกัน");
+
+                return;
+
+            }
+
+            if (!agree.checked) {
+
+                alert("กรุณายอมรับเงื่อนไขก่อนสมัคร");
+
+                return;
+
+            }
+
+            msg.style.display = "block";
+
+            setTimeout(function () {
+
+                window.location.href = "index.html";
+
+            }, 2000);
+
+        }
+
+    </script>
+
+</body>
+
+</html>

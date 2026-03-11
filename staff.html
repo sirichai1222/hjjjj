@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+
+<meta charset="UTF-8">
+<title>Carwash Staff System</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:sans-serif;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
+}
+
+/* navbar */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+padding:20px 60px;
+background:rgba(0,0,0,0.4);
+}
+
+.clock{
+opacity:0.8;
+}
+
+/* dashboard */
+
+.dashboard{
+display:flex;
+gap:20px;
+padding:20px 60px;
+}
+
+.card{
+flex:1;
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:15px;
+text-align:center;
+}
+
+.card h2{
+margin:0;
+font-size:35px;
+}
+
+/* form */
+
+.form{
+padding:20px 60px;
+}
+
+.form input,.form select{
+padding:8px;
+margin-right:10px;
+border-radius:6px;
+border:none;
+}
+
+.form button{
+padding:8px 15px;
+border:none;
+border-radius:6px;
+background:#00c6ff;
+color:white;
+cursor:pointer;
+}
+
+/* search */
+
+.search{
+padding:0 60px;
+margin-bottom:10px;
+}
+
+.search input{
+padding:8px;
+border-radius:6px;
+border:none;
+}
+
+/* table */
+
+.container{
+padding:20px 60px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:rgba(255,255,255,0.05);
+}
+
+th,td{
+padding:10px;
+text-align:center;
+}
+
+th{
+background:rgba(255,255,255,0.1);
+}
+
+/* buttons */
+
+button.action{
+background:#3498db;
+border:none;
+color:white;
+padding:5px 10px;
+border-radius:5px;
+cursor:pointer;
+margin:2px;
+}
+
+.delete{
+background:#e74c3c;
+}
+
+/* status */
+
+.status{
+padding:5px 10px;
+border-radius:6px;
+}
+
+.wait{background:#f1c40f;}
+.progress{background:#3498db;}
+.done{background:#2ecc71;}
+
+/* car animation */
+
+.car{
+position:fixed;
+bottom:20px;
+left:-200px;
+font-size:40px;
+animation:run 4s linear;
+}
+
+@keyframes run{
+0%{left:-200px}
+100%{left:110%}
+}
+
+/* responsive */
+
+@media(max-width:768px){
+
+.dashboard{
+flex-direction:column;
+}
+
+.form{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+
+<div>🚗 ระบบพนักงานล้างรถ</div>
+
+<div class="clock" id="clock"></div>
+
+</div>
+
+<!-- dashboard -->
+
+<div class="dashboard">
+
+<div class="card">
+<p>รถทั้งหมด</p>
+<h2 id="total">0</h2>
+</div>
+
+<div class="card">
+<p>กำลังล้าง</p>
+<h2 id="washing">0</h2>
+</div>
+
+<div class="card">
+<p>เสร็จแล้ว</p>
+<h2 id="done">0</h2>
+</div>
+
+</div>
+
+<!-- form -->
+
+<div class="form">
+
+<input type="text" id="name" placeholder="ชื่อลูกค้า">
+<input type="text" id="plate" placeholder="ทะเบียนรถ">
+
+<select id="package">
+<option>Basic</option>
+<option>Premium</option>
+<option>VIP</option>
+</select>
+
+<input type="time" id="time">
+
+<button onclick="addQueue()">เพิ่มคิว</button>
+
+<button onclick="clearAll()">ลบทั้งหมด</button>
+
+</div>
+
+<!-- search -->
+
+<div class="search">
+<input type="text" id="search" placeholder="ค้นหา..." onkeyup="searchQueue()">
+</div>
+
+<!-- chart -->
+
+<div style="padding:20px 60px">
+<canvas id="chart"></canvas>
+</div>
+
+<!-- table -->
+
+<div class="container">
+
+<table>
+
+<tr>
+
+<th>ลูกค้า</th>
+<th>ทะเบียน</th>
+<th>แพ็คเกจ</th>
+<th>เวลา</th>
+<th>สถานะ</th>
+<th>จัดการ</th>
+
+</tr>
+
+<tbody id="tableBody"></tbody>
+
+</table>
+
+</div>
+
+<audio id="sound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+
+<script>
+
+/* clock */
+
+setInterval(()=>{
+document.getElementById("clock").innerText=new Date().toLocaleTimeString()
+},1000)
+
+/* data */
+
+let bookings=JSON.parse(localStorage.getItem("bookings"))||[]
+
+function loadTable(){
+
+let table=document.getElementById("tableBody")
+
+table.innerHTML=""
+
+bookings.forEach((b,i)=>{
+
+table.innerHTML+=`
+
+<tr>
+
+<td>${b.name}</td>
+<td>${b.plate}</td>
+<td>${b.package}</td>
+<td>${b.time}</td>
+
+<td>
+<span class="status ${b.status}">
+${statusText(b.status)}
+</span>
+</td>
+
+<td>
+
+<button class="action" onclick="updateStatus(${i})">
+สถานะ
+</button>
+
+<button class="action" onclick="editQueue(${i})">
+แก้ไข
+</button>
+
+<button class="action delete" onclick="deleteQueue(${i})">
+ลบ
+</button>
+
+</td>
+
+</tr>
+
+`
+
+})
+
+updateDashboard()
+drawChart()
+
+}
+
+function statusText(s){
+
+if(s==="wait")return"รอคิว"
+if(s==="progress")return"กำลังล้าง"
+if(s==="done")return"เสร็จแล้ว"
+
+}
+
+/* add */
+
+function addQueue(){
+
+let name=document.getElementById("name").value
+let plate=document.getElementById("plate").value
+let pack=document.getElementById("package").value
+let time=document.getElementById("time").value
+
+if(!name||!plate||!time){
+
+alert("กรอกข้อมูลให้ครบ")
+
+return
+
+}
+
+bookings.push({
+
+name:name,
+plate:plate,
+package:pack,
+time:time,
+status:"wait"
+
+})
+
+save()
+
+runCar()
+
+}
+
+/* edit */
+
+function editQueue(i){
+
+let name=prompt("ชื่อลูกค้า",bookings[i].name)
+
+let plate=prompt("ทะเบียน",bookings[i].plate)
+
+if(name && plate){
+
+bookings[i].name=name
+bookings[i].plate=plate
+
+save()
+
+}
+
+}
+
+/* delete */
+
+function deleteQueue(i){
+
+if(confirm("ลบคิวนี้?")){
+
+bookings.splice(i,1)
+
+save()
+
+}
+
+}
+
+/* clear */
+
+function clearAll(){
+
+if(confirm("ลบทั้งหมด?")){
+
+bookings=[]
+
+save()
+
+}
+
+}
+
+/* status */
+
+function updateStatus(i){
+
+if(bookings[i].status==="wait"){
+
+bookings[i].status="progress"
+
+}
+
+else if(bookings[i].status==="progress"){
+
+bookings[i].status="done"
+
+document.getElementById("sound").play()
+
+}
+
+save()
+
+}
+
+/* dashboard */
+
+function updateDashboard(){
+
+document.getElementById("total").innerText=bookings.length
+
+document.getElementById("washing").innerText=
+bookings.filter(b=>b.status==="progress").length
+
+document.getElementById("done").innerText=
+bookings.filter(b=>b.status==="done").length
+
+}
+
+/* search */
+
+function searchQueue(){
+
+let input=document.getElementById("search").value.toLowerCase()
+
+document.querySelectorAll("#tableBody tr").forEach(r=>{
+
+r.style.display=
+r.innerText.toLowerCase().includes(input)?"":"none"
+
+})
+
+}
+
+/* chart */
+
+function drawChart(){
+
+let wait=bookings.filter(b=>b.status==="wait").length
+let progress=bookings.filter(b=>b.status==="progress").length
+let done=bookings.filter(b=>b.status==="done").length
+
+new Chart(document.getElementById("chart"),{
+
+type:"bar",
+
+data:{
+labels:["รอคิว","กำลังล้าง","เสร็จแล้ว"],
+datasets:[{
+label:"จำนวนรถ",
+data:[wait,progress,done]
+}]
+}
+
+})
+
+}
+
+/* car animation */
+
+function runCar(){
+
+let car=document.createElement("div")
+
+car.className="car"
+
+car.innerHTML="🚗"
+
+document.body.appendChild(car)
+
+setTimeout(()=>{
+
+car.remove()
+
+},4000)
+
+}
+
+/* save */
+
+function save(){
+
+localStorage.setItem("bookings",JSON.stringify(bookings))
+
+loadTable()
+
+}
+
+loadTable()
+
+</script>
+
+</body>
+
+</html>

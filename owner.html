@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:sans-serif;
+background:linear-gradient(135deg,#1e3c72,#2a5298);
+color:white;
+}
+
+/* navbar */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+padding:15px 40px;
+background:rgba(0,0,0,0.4);
+}
+
+.logout{
+background:red;
+border:none;
+padding:8px 15px;
+color:white;
+cursor:pointer;
+border-radius:6px;
+}
+
+/* cards */
+
+.cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+padding:20px 40px;
+}
+
+.card{
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:10px;
+text-align:center;
+}
+
+.card h2{
+margin:0;
+font-size:30px;
+}
+
+/* chart */
+
+.chart-box{
+width:400px;
+margin:20px auto;
+}
+
+/* sections */
+
+.section{
+padding:20px 40px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:rgba(255,255,255,0.1);
+}
+
+th,td{
+padding:10px;
+text-align:center;
+}
+
+th{
+background:rgba(255,255,255,0.2);
+}
+
+/* buttons */
+
+button{
+padding:6px 12px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.add{background:#2ecc71;color:white;}
+.delete{background:red;color:white;}
+
+input{
+padding:6px;
+border-radius:6px;
+border:none;
+}
+
+.status{
+padding:4px 10px;
+border-radius:6px;
+}
+
+.wait{background:orange;}
+.progress{background:deepskyblue;}
+.done{background:limegreen;}
+
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+
+<h2>🚗 Admin Carwash</h2>
+
+<button class="logout" onclick="logout()">ออกจากระบบ</button>
+
+</div>
+
+<!-- cards -->
+
+<div class="cards">
+
+<div class="card">
+<p>รถวันนี้</p>
+<h2 id="carToday">0</h2>
+</div>
+
+<div class="card">
+<p>รายได้วันนี้</p>
+<h2 id="incomeToday">0</h2>
+</div>
+
+<div class="card">
+<p>คิวทั้งหมด</p>
+<h2 id="queueTotal">0</h2>
+</div>
+
+<div class="card">
+<p>พนักงาน</p>
+<h2 id="staffTotal">0</h2>
+</div>
+
+</div>
+
+<!-- chart -->
+
+<div class="chart-box">
+
+<canvas id="incomeChart"></canvas>
+
+</div>
+
+<!-- car table -->
+
+<div class="section">
+
+<h2> รถที่เข้ามาล้าง</h2>
+
+<input type="text" id="search" placeholder="ค้นหา..." onkeyup="searchCar()">
+
+<table>
+
+<tr>
+<th>ลูกค้า</th>
+<th>ทะเบียน</th>
+<th>แพ็คเกจ</th>
+<th>สถานะ</th>
+</tr>
+
+<tbody id="carTable"></tbody>
+
+</table>
+
+</div>
+
+<!-- staff -->
+
+<div class="section">
+
+<h2>👨‍🔧 จัดการพนักงาน</h2>
+
+<input id="staffName" placeholder="ชื่อ">
+<input id="staffRole" placeholder="ตำแหน่ง">
+
+<button class="add" onclick="addStaff()">เพิ่ม</button>
+
+<table>
+
+<tr>
+<th>ชื่อ</th>
+<th>ตำแหน่ง</th>
+<th>ลบ</th>
+</tr>
+
+<tbody id="staffTable"></tbody>
+
+</table>
+
+</div>
+
+<script>
+
+/* data */
+
+let bookings = JSON.parse(localStorage.getItem("bookings")) || []
+
+let staff = JSON.parse(localStorage.getItem("staff")) || []
+
+let price={
+Basic:100,
+Premium:200,
+VIP:300
+}
+
+/* dashboard */
+
+function loadDashboard(){
+
+document.getElementById("carToday").innerText=bookings.length
+
+document.getElementById("queueTotal").innerText=bookings.length
+
+let income=0
+
+bookings.forEach(b=>{
+
+if(b.status==="done"){
+income+=price[b.package]||0
+}
+
+})
+
+document.getElementById("incomeToday").innerText=income+" บาท"
+
+document.getElementById("staffTotal").innerText=staff.length
+
+}
+
+/* cars */
+
+function loadCars(){
+
+let table=document.getElementById("carTable")
+
+table.innerHTML=""
+
+bookings.forEach(b=>{
+
+table.innerHTML+=`
+
+<tr>
+<td>${b.name}</td>
+<td>${b.plate}</td>
+<td>${b.package}</td>
+<td><span class="status ${b.status}">${b.status}</span></td>
+</tr>
+
+`
+
+})
+
+}
+
+/* staff */
+
+function loadStaff(){
+
+let table=document.getElementById("staffTable")
+
+table.innerHTML=""
+
+staff.forEach((s,i)=>{
+
+table.innerHTML+=`
+
+<tr>
+<td>${s.name}</td>
+<td>${s.role}</td>
+<td><button class="delete" onclick="deleteStaff(${i})">ลบ</button></td>
+</tr>
+
+`
+
+})
+
+}
+
+/* add staff */
+
+function addStaff(){
+
+let name=document.getElementById("staffName").value
+let role=document.getElementById("staffRole").value
+
+if(!name||!role){
+
+alert("กรอกข้อมูล")
+
+return
+
+}
+
+staff.push({name,role})
+
+localStorage.setItem("staff",JSON.stringify(staff))
+
+loadStaff()
+loadDashboard()
+
+}
+
+/* delete */
+
+function deleteStaff(i){
+
+staff.splice(i,1)
+
+localStorage.setItem("staff",JSON.stringify(staff))
+
+loadStaff()
+loadDashboard()
+
+}
+
+/* search */
+
+function searchCar(){
+
+let input=document.getElementById("search").value.toLowerCase()
+
+let rows=document.querySelectorAll("#carTable tr")
+
+rows.forEach(r=>{
+
+r.style.display=r.innerText.toLowerCase().includes(input)?"":"none"
+
+})
+
+}
+
+/* chart */
+
+new Chart(document.getElementById("incomeChart"),{
+
+type:"bar",
+
+data:{
+
+labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+
+datasets:[{
+
+label:"รายได้",
+
+data:[300,400,200,600,900,700,500]
+
+}]
+
+}
+
+})
+
+/* logout */
+
+function logout(){
+
+localStorage.clear()
+
+location.href="index.html"
+
+}
+
+/* init */
+
+loadDashboard()
+loadCars()
+loadStaff()
+
+</script>
+
+</body>
+
+</html>
